@@ -39,3 +39,13 @@ int main()
   }
   return 0;
 }
+
+IntArray::~IntArray() {
+  delete[] a;
+}
+IntArray::IntArray(int i):
+  k(1),
+  a(new int[1])
+{
+    * a = i;
+}

@@ -1,4 +1,8 @@
-#include<iostream>
+#include <iostream>
+#include <fstream>
+#include <cstdlib>
+#include <limits>
+#include <stdexcept>
 
 struct IntArray
 {
@@ -26,6 +30,32 @@ struct IntMatrix {
 
 public:
   IntMatrix() : rows_(0), cols_(0), data_() {}
+
+  void readFromFile(const char* filename) {
+    std::ifstream file(filename);
+    if (!file.is_open()) {
+        throw std::runtime_error("Cannot open file");
+    }
+
+    size_t r, c;
+    if (!(file >> r >> c)) {
+        throw std::runtime_error("Invalid header");
+    }
+
+    rows_ = r;
+    cols_ = c;
+        
+    data_ = IntArray(0); 
+
+    size_t total = rows_ * cols_;
+    for (size_t i = 0; i < total; ++i) {
+        int val;
+        if (!(file >> val)) {
+            throw std::runtime_error("Not enough data");
+        }
+        data_.add(val);
+    }
+  }
 };
 
 int main()

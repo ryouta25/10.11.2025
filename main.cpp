@@ -8,6 +8,12 @@ struct IntArray
   size_t size() const noexcept;
   int last() const noexcept;
   IntArray(int i);
+
+  IntArray();
+  IntArray(size_t n);
+  IntArray(const IntArray& other);
+  IntArray& operator=(const IntArray& other);
+
   ~IntArray();
   int * a;
   size_t k;

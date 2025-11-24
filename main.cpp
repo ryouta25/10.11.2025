@@ -65,6 +65,36 @@ public:
       std::cout << std::endl;
     }
   }
+
+  void insertRow(int after_row, int value) {
+    if (after_row < 0 || static_cast<size_t>(after_row) > rows_) {
+      throw std::logic_error("Invalid row index");
+    }
+
+    size_t new_rows = rows_ + 1;
+    size_t new_total = new_rows * cols_;
+        
+    IntArray new_data(new_total);
+        
+    size_t src_idx = 0;
+    size_t dest_idx = 0;
+    size_t insert_pos_elements = static_cast<size_t>(after_row) * cols_;
+
+    for (; dest_idx < insert_pos_elements; ++dest_idx) {
+      new_data.a[dest_idx] = data_.a[src_idx++];
+    }
+
+    for (size_t c = 0; c < cols_; ++c) {
+      new_data.a[dest_idx++] = value;
+    }
+
+    while (src_idx < data_.size()) {
+      new_data.a[dest_idx++] = data_.a[src_idx++];
+    }
+
+    data_ = new_data;
+    rows_ = new_rows;
+    }
 };
 
 int main()

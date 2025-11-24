@@ -128,30 +128,55 @@ public:
     }
 };
 
-int main()
+int main(int argc, char** argv)
 {
-  int next = 0;
-  std::cin >> next;
+  if (argc < 2) {
+    return 1;
+  }
+
   try {
-    IntArray a(next);
-    while (std::cin >> next)
-    {
-      a.add(next);
-    }
-    if (std::cin.fail()) {
+    IntMatrix matrix;
+        
+    try {
+      matrix.readFromFile(argv[1]);
+    } catch (const std::runtime_error&) {
+      return 1;
+    } catch (const std::exception&) {
       return 1;
     }
 
-    size_t count = 1;
-    for (size_t i = 0; i < a.size() - 1; ++i)
-    {
-      int d = a.get(i);
-      count+=!(d%a.last());
+    int cmd, p1, p2;
+    while (std::cin >> cmd) {
+      if (!(std::cin >> p1 >> p2)) {
+        return 1; 
+      }
+
+      try {
+        if (cmd == 1) {
+          matrix.insertRow(p1, p2);
+        } else if (cmd == 2) {
+          matrix.insertCol(p1, p2);
+        } else {
+          throw std::logic_error("Unknown command");
+        }
+                
+        matrix.print();
+
+      } catch (const std::logic_error&) {
+        return 3;
+      }
     }
-    std::cout << count << std::endl;
+
+    if (!std::cin.eof() && std::cin.fail()) {
+      return 1;
+    }
+
+  } catch (const std::bad_alloc&) {
+    return 2;
   } catch (...) {
     return 2;
   }
+
   return 0;
 }
 

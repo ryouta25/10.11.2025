@@ -183,28 +183,63 @@ int main(int argc, char** argv)
 IntArray::~IntArray() {
   delete[] a;
 }
+
 IntArray::IntArray(int i):
   k(1),
   a(new int[1])
 {
-    * a = i;
+  * a = i;
+}
+
+IntArray::IntArray() : k(0), a(nullptr) {}
+
+IntArray::IntArray(size_t n) : k(n), a(nullptr) {
+  if (n > 0) a = new int[n];
+}
+
+IntArray::IntArray(const IntArray& other) : k(other.k), a(nullptr) {
+  if (k > 0) {
+    a = new int[k];
+    for (size_t i = 0; i < k; ++i) {
+      a[i] = other.a[i];
+    }
+  }
+}
+
+IntArray& IntArray::operator=(const IntArray& other) {
+  if (this != &other) {
+    delete[] a;
+    k = other.k;
+    a = nullptr;
+    if (k > 0) {
+      a = new int[k];
+      for (size_t i = 0; i < k; ++i) {
+        a[i] = other.a[i];
+      }
+    }
+  }
+  return *this;
 }
 
 int IntArray::get(size_t id) const noexcept{
   return a[id];
 }
+
 int IntArray::at(size_t id) const {
-  if (! id < k){
+  if (! (id < k)){
     throw std::logic_error("no");
   }
   return a[id];
 }
+
 size_t IntArray::size() const noexcept {
   return k;
 }
+
 int IntArray::last() const noexcept{
   return get(size() - 1);
 }
+
 void IntArray::add(int i) {
   int * tmp = new int[size() + 1];
   for (size_t j = 0; j< size(); ++j) {

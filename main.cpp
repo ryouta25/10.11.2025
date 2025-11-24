@@ -95,6 +95,37 @@ public:
     data_ = new_data;
     rows_ = new_rows;
     }
+
+    void insertCol(int after_col, int value) {
+      if (after_col < 0 || static_cast<size_t>(after_col) > cols_) {
+        throw std::logic_error("Invalid col index");
+      }
+
+      size_t new_cols = cols_ + 1;
+      size_t new_total = rows_ * new_cols;
+        
+      IntArray new_data(new_total);
+        
+      size_t dest_idx = 0;
+      size_t insertion_index = static_cast<size_t>(after_col);
+
+      for (size_t r = 0; r < rows_; ++r) {
+        size_t row_start = r * cols_;
+            
+        for (size_t c = 0; c < insertion_index; ++c) {
+          new_data.a[dest_idx++] = data_.a[row_start + c];
+        }
+            
+        new_data.a[dest_idx++] = value;
+            
+        for (size_t c = insertion_index; c < cols_; ++c) {
+          new_data.a[dest_idx++] = data_.a[row_start + c];
+        }
+      }
+
+      data_ = new_data;
+      cols_ = new_cols;
+    }
 };
 
 int main()

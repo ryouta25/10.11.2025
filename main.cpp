@@ -19,6 +19,15 @@ struct IntArray
   size_t k;
 };
 
+struct IntMatrix {
+  size_t rows_;
+  size_t cols_;
+  IntArray data_;
+
+public:
+  IntMatrix() : rows_(0), cols_(0), data_() {}
+};
+
 int main()
 {
   int next = 0;

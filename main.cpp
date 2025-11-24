@@ -34,26 +34,35 @@ public:
   void readFromFile(const char* filename) {
     std::ifstream file(filename);
     if (!file.is_open()) {
-        throw std::runtime_error("Cannot open file");
+      throw std::runtime_error("Cannot open file");
     }
 
     size_t r, c;
     if (!(file >> r >> c)) {
-        throw std::runtime_error("Invalid header");
+      throw std::runtime_error("Invalid header");
     }
 
     rows_ = r;
     cols_ = c;
         
-    data_ = IntArray(0); 
+    data_ = IntArray(0);
 
     size_t total = rows_ * cols_;
     for (size_t i = 0; i < total; ++i) {
-        int val;
-        if (!(file >> val)) {
-            throw std::runtime_error("Not enough data");
-        }
-        data_.add(val);
+      int val;
+      if (!(file >> val)) {
+        throw std::runtime_error("Not enough data");
+      }
+      data_.add(val);
+    }
+  }
+
+  void print() const {
+    for (size_t i = 0; i < rows_; ++i) {
+      for (size_t j = 0; j < cols_; ++j) {
+        std::cout << data_.get(i * cols_ + j) << (j == cols_ - 1 ? "" : " ");
+      }
+      std::cout << std::endl;
     }
   }
 };
